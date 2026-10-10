@@ -133,7 +133,7 @@ const WA_NUMBER='2349048606453', WA_DISPLAY='+234 904 860 6453', EMAIL='info@dam
 /* ── Lead capture ─────────────────────────────────────────────
    Paste the Google Apps Script web app URL (ends in /exec) below.
    See apps-script/Code.gs and README.md for the 3-minute setup. */
-const SHEET_ENDPOINT='';
+const SHEET_ENDPOINT='https://script.google.com/macros/s/AKfycbypaXTW455pWKqCVq0OtSD9Nknu8SgyYR18kW2ty2ORueQjpMI2mxs2qlX64h8sU_Dk/exec';
 const QS=new URLSearchParams(location.search);
 const SOURCE=QS.get('source')||'Webinar 10 Oct 2026';
 const REF=[QS.get('ref'),QS.get('utm_source'),QS.get('utm_campaign')].filter(Boolean).join(' / ');
