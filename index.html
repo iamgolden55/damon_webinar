@@ -195,7 +195,7 @@ function digits(){
   if(A.cc!=='other'){const c=A.cc.slice(1); if(d.startsWith(c)&&d.length>10) d=d.slice(c.length); if(d.startsWith('0')) d=d.slice(1);}
   return d;
 }
-function phoneOk(){const d=digits(); return A.cc==='other'? d.length>=8&&d.length<=15 : d.length>=9&&d.length<=11;}
+function phoneOk(){const d=digits(); return A.cc==='other'? d.length>=8&&d.length<=15 : d.length===10;}
 function fullPhone(){return A.cc==='other' ? '+'+digits() : A.cc+' '+digits();}
 function valid(s){
   if(s.id==='name') return A.name.trim().length>=2;
@@ -205,7 +205,7 @@ function valid(s){
   if(s.kind==='single') return !!A[s.id];
   return true;
 }
-const ERR={name:'Please enter your name.',phone:'Please check the number. Include the full mobile number.',email:'Please enter a valid email address, like name@example.com.'};
+const ERR={name:'Please enter your name.',phone:'Please check the number. UK and Nigerian mobiles have 10 digits after the country code.',email:'Please enter a valid email address, like name@example.com.'};
 
 function message(){
   return ["Hello Damon BlaQ, I'm interested in UK property.","",
