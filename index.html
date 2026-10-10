@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Tell Damon BlaQ Consulting what you want from a UK buy-to-let investment.">
+<meta name="theme-color" content="#F5F5F7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0A0D13" media="(prefers-color-scheme: dark)">
+<title>UK Buy-to-Let Interest Form</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one question per screen, single centred column, sticky action bar at the thumb. */
+:root{
+  --bg:#F5F5F7; --surface:#FFFFFF; --ink:#1D1D1F; --muted:#6E6E73; --line:#D8DBE2;
+  --brand:#0E2240; --gold:#9A7633; --btn:#0E2240; --btn-ink:#FFFFFF;
+  --sel-bg:#EDF1F7; --sel-line:#0E2240; --danger:#C0352A; --wa:#1E8A4C; --wa-ink:#FFFFFF;
+  /* Display: Samsung Sharp Sans stand-in. Body/UI: Uber Move stand-in. Swap names here if the licensed fonts are added. */
+  --font:"Figtree","Uber Move Text",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  --display:"Urbanist","Samsung Sharp Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0A0D13; --surface:#161A22; --ink:#F2F2F4; --muted:#9BA0AC; --line:#2B313D;
+  --brand:#E9EDF5; --gold:#D6B26C; --btn:#D6B26C; --btn-ink:#16110A;
+  --sel-bg:#1D2431; --sel-line:#D6B26C; --danger:#FF7A6E; --wa:#25A35C; --wa-ink:#FFFFFF; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A0D13; --surface:#161A22; --ink:#F2F2F4; --muted:#9BA0AC; --line:#2B313D;
+  --brand:#E9EDF5; --gold:#D6B26C; --btn:#D6B26C; --btn-ink:#16110A;
+  --sel-bg:#1D2431; --sel-line:#D6B26C; --danger:#FF7A6E; --wa:#25A35C; --wa-ink:#FFFFFF; color-scheme:dark}
+
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:17px/1.47 var(--font);-webkit-font-smoothing:antialiased;letter-spacing:-0.01em}
+*{box-sizing:border-box}
+.app{min-height:100%;display:flex;flex-direction:column;max-width:600px;margin:0 auto;padding-inline:20px}
+
+.top{display:flex;align-items:center;gap:14px;min-height:60px;padding-block:10px}
+.back{flex:none;width:40px;height:40px;margin-left:-8px;border:0;border-radius:50%;background:transparent;color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.back:hover{background:var(--surface)}
+.track{flex:1;height:4px;border-radius:4px;background:var(--line);overflow:hidden}
+.bar{height:100%;width:0;background:var(--btn);border-radius:4px}
+.count{flex:none;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:44px;text-align:right}
+.brand{display:flex;flex-direction:column;gap:2px}
+.brand b{font:700 19px/1 var(--display);color:var(--brand);letter-spacing:-0.02em}
+.brand b span{color:var(--gold)}
+.brand small{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+main{flex:1;display:flex;flex-direction:column;gap:22px;padding-block:5vh 24px}
+.screen{display:flex;flex-direction:column;gap:22px}
+.screen > *,.opts > *,.summary > *,.perks > *,.actions > *{will-change:transform,opacity}
+
+.eyebrow{margin:0;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.q{margin:0;display:block;font:800 clamp(29px,7.4vw,42px)/1.1 var(--display);letter-spacing:-0.02em;text-wrap:balance;color:var(--ink)}
+.sub{margin:-8px 0 0;color:var(--muted);font-size:17px;max-width:46ch}
+.hero{font-size:clamp(34px,9vw,52px);line-height:1.05}
+
+.perks{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:12px}
+.perks li{display:flex;align-items:center;gap:12px;font-size:17px}
+.perks svg{flex:none;color:var(--gold)}
+
+.field{width:100%;height:60px;border:0;border-radius:14px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);padding:0 18px;font:400 21px/1 var(--font);color:var(--ink);letter-spacing:-0.01em;transition:box-shadow .15s}
+.field::placeholder{color:var(--muted);opacity:.7}
+.field:focus{outline:none;box-shadow:inset 0 0 0 2px var(--sel-line)}
+.phone{display:flex;gap:10px}
+.phone .field{min-width:0}
+.cc{flex:none;width:118px;padding:0 12px;font-size:17px;appearance:none;-webkit-appearance:none;cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 27px,calc(100% - 13px) 27px;background-size:5px 5px;background-repeat:no-repeat}
+.err{margin:-10px 0 0;color:var(--danger);font-size:15px}
+
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;min-height:60px;padding:15px 18px;border:0;border-radius:14px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);font:500 17px/1.35 var(--font);color:var(--ink);text-align:left;cursor:pointer;transition:box-shadow .15s,background .15s,transform .1s;letter-spacing:-0.01em}
+.opt:hover{box-shadow:inset 0 0 0 1px var(--muted)}
+.opt[aria-checked="true"]{background:var(--sel-bg);box-shadow:inset 0 0 0 2px var(--sel-line)}
+.tick{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1.5px var(--line);color:transparent;transition:background .15s}
+.opt[role="checkbox"] .tick{border-radius:7px}
+.opt[aria-checked="true"] .tick{background:var(--btn);box-shadow:none;color:var(--btn-ink)}
+
+.summary{margin:0;background:var(--surface);border-radius:16px;box-shadow:inset 0 0 0 1px var(--line);overflow:hidden}
+.row{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:13px 18px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row dt{font-size:13px;color:var(--muted)}
+.row dd{margin:0;grid-column:1;font-size:16px;min-width:0;overflow-wrap:anywhere}
+.edit{grid-column:2;grid-row:1 / span 2;align-self:center;border:0;background:none;color:var(--gold);font:600 15px var(--font);cursor:pointer;padding:6px 0 6px 8px}
+.consent{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;border-radius:16px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);font-size:15px;line-height:1.45;cursor:pointer}
+.consent input{flex:none;width:22px;height:22px;margin:1px 0 0;accent-color:var(--btn);cursor:pointer}
+
+.actions{position:sticky;bottom:0;display:flex;flex-direction:column;gap:10px;padding-block:14px calc(18px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--bg) 78%,transparent)}
+.btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;height:54px;border:0;border-radius:999px;font:600 17px/1 var(--font);letter-spacing:-0.01em;text-decoration:none;cursor:pointer;transition:opacity .15s,transform .1s}
+.btn:active{transform:scale(.985)}
+.primary{background:var(--btn);color:var(--btn-ink)}
+.wa{background:var(--wa);color:var(--wa-ink)}
+.ghost{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.btn:disabled,.btn[aria-disabled="true"]{opacity:.35;cursor:not-allowed;transform:none}
+.pair{display:flex;gap:10px}
+.note{margin:2px 0 0;text-align:center;font-size:13px;color:var(--muted)}
+.link{border:0;background:none;color:var(--muted);font:500 15px var(--font);cursor:pointer;padding:8px;text-decoration:underline;text-underline-offset:3px}
+
+.done-mark{width:68px;height:68px;border-radius:50%;background:var(--btn);color:var(--btn-ink);display:grid;place-items:center}
+.contacts{display:flex;flex-direction:column;gap:6px;font-size:16px;color:var(--muted)}
+.contacts strong{color:var(--ink);font-weight:600;user-select:all}
+textarea.fallback{width:100%;min-height:200px;border:0;border-radius:14px;padding:14px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);color:var(--ink);font:14px/1.5 var(--font)}
+
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.field:focus-visible{outline:none}
+
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:15px;font-weight:500;pointer-events:none;transition:opacity .2s}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <button class="back" id="back" type="button" aria-label="Back" hidden>
+      <svg width="12" height="20" viewBox="0 0 12 20" fill="none" aria-hidden="true"><path d="M10 2 2 10l8 8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="brand" id="brand"><b>Damon Bla<span>Q</span></b><small>Real Estate · Investment · Consultancy</small></div>
+    <div class="track" id="track" hidden><div class="bar" id="bar"></div></div>
+    <div class="count" id="count" hidden></div>
+  </header>
+  <main id="main" aria-live="polite"></main>
+  <footer class="actions" id="actions"></footer>
+</div>
+<div class="toast" id="toast" role="status" style="opacity:0"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+const G=window.gsap, RM=matchMedia('(prefers-reduced-motion: reduce)').matches, ANIM=!!G&&!RM;
+let moving=false;
+const WA_NUMBER='2349048606453', WA_DISPLAY='+234 904 860 6453', EMAIL='info@damonblaq.com';
+const OPTS={
+  interests:['Monthly rental income in pounds','Long-term property growth','Owning a UK property','A mortgage-assisted purchase'],
+  budget:['Under £200,000','£200,000–£250,000','£250,000+','Not sure yet'],
+  route:['Cash','Mortgage','I need advice'],
+  timeline:['Ready now','In 1–3 months','In 3–6 months','Just exploring'],
+  next:['Send me current units and prices','Book a private consultation','Arrange an Access Bank UK mortgage review','Discuss reserving a suitable unit'],
+  contact:['WhatsApp','Phone call','Email']
+};
+const STEPS=[
+  {id:'intro',kind:'intro'},
+  {id:'name',kind:'text',q:()=>'What’s your name?',sub:'So we know who we’re speaking with.'},
+  {id:'phone',kind:'phone',q:()=>`Thanks, ${first()}. What’s your WhatsApp number?`,sub:'We’ll only use it to reply about your enquiry.'},
+  {id:'email',kind:'text',q:()=>'And your email address?',sub:'For details worth keeping, like unit lists and prices.'},
+  {id:'interests',kind:'multi',q:()=>'What matters most to you?',sub:'Choose all that apply.'},
+  {id:'budget',kind:'single',q:()=>'What’s your property budget?'},
+  {id:'route',kind:'single',q:()=>'How would you like to buy?'},
+  {id:'timeline',kind:'single',q:()=>'When are you hoping to buy?'},
+  {id:'next',kind:'multi',q:()=>'What should we do next?',sub:'Choose all that apply.'},
+  {id:'contact',kind:'single',q:()=>'How should we get in touch?'},
+  {id:'review',kind:'review'},
+  {id:'done',kind:'done'}
+];
+const REVIEW=10, TOTAL=10;
+const LABELS={name:'Name',phone:'WhatsApp',email:'Email',interests:'Interested in',budget:'Budget',route:'Purchase route',timeline:'Timeline',next:'Next step',contact:'Contact me by'};
+
+let A={name:'',cc:'+44',phone:'',email:'',interests:[],budget:'',route:'',timeline:'',next:[],contact:'',consent:false};
+let i=0, dir=1, toReview=false, busy=false;
+try{const s=JSON.parse(localStorage.getItem('dbq-btl')||'null'); if(s) A=Object.assign(A,s,{consent:false});}catch(e){}
+function save(){try{localStorage.setItem('dbq-btl',JSON.stringify(A))}catch(e){}}
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const first=()=>esc((A.name.trim().split(/\s+/)[0])||'');
+const CHECK='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2.5 7.4 5.6 10.4 11.5 3.8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function digits(){
+  let d=A.phone.replace(/\D/g,'');
+  if(A.cc!=='other'){const c=A.cc.slice(1); if(d.startsWith(c)&&d.length>10) d=d.slice(c.length); if(d.startsWith('0')) d=d.slice(1);}
+  return d;
+}
+function phoneOk(){const d=digits(); return A.cc==='other'? d.length>=8&&d.length<=15 : d.length>=9&&d.length<=11;}
+function fullPhone(){return A.cc==='other' ? '+'+digits() : A.cc+' '+digits();}
+function valid(s){
+  if(s.id==='name') return A.name.trim().length>=2;
+  if(s.id==='phone') return phoneOk();
+  if(s.id==='email') return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(A.email.trim());
+  if(s.kind==='multi') return A[s.id].length>0;
+  if(s.kind==='single') return !!A[s.id];
+  return true;
+}
+const ERR={name:'Please enter your name.',phone:'Please check the number. Include the full mobile number.',email:'Please enter a valid email address, like name@example.com.'};
+
+function message(){
+  return ["Hello Damon BlaQ, I'm interested in UK property.","",
+    `Name: ${A.name.trim()}`,`WhatsApp: ${fullPhone()}`,`Email: ${A.email.trim()}`,
+    `Interested in: ${A.interests.join(', ')}`,`Budget: ${A.budget}`,`Purchase route: ${A.route}`,
+    `Timeline: ${A.timeline}`,`Next step: ${A.next.join(', ')}`,`Preferred contact: ${A.contact}`,"",
+    "I'd like Damon BlaQ Consulting to contact me about my UK property interest. I understand this form is not a commitment to buy or borrow."].join('\n');
+}
+const waHref=()=>`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message())}`;
+const mailHref=()=>`mailto:${EMAIL}?subject=${encodeURIComponent('UK property interest – '+A.name.trim())}&body=${encodeURIComponent(message())}`;
+
+function optsHTML(s){
+  const multi=s.kind==='multi';
+  return `<div class="opts" role="${multi?'group':'radiogroup'}" aria-labelledby="qt">`+
+    OPTS[s.id].map((o,k)=>{const on=multi?A[s.id].includes(o):A[s.id]===o;
+      return `<button type="button" class="opt" id="o-${s.id}-${k}" role="${multi?'checkbox':'radio'}" aria-checked="${on}" data-v="${esc(o)}"><span>${esc(o)}</span><span class="tick">${CHECK}</span></button>`}).join('')+`</div>`;
+}
+
+function body(s){
+  if(s.kind==='intro') return `
+    <p class="eyebrow">UK buy-to-let · Private investor enquiry</p>
+    <h1 class="q hero">Let’s find your UK investment.</h1>
+    <p class="sub">Nine quick questions. Then we’ll send you suitable opportunities and guide you through the next step.</p>
+    <ul class="perks">${['Rental income in pounds','Long-term asset growth','Clear purchase guidance'].map(p=>`<li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M6 10.3 8.6 12.8 14 7.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>${p}</li>`).join('')}</ul>`;
+  if(s.kind==='text'){const em=s.id==='email';
+    return `<label class="q" id="qt" for="f-${s.id}">${s.q()}</label><p class="sub">${s.sub}</p>
+    <input class="field" id="f-${s.id}" type="${em?'email':'text'}" ${em?'inputmode="email" autocomplete="email" placeholder="name@example.com"':'autocomplete="name" autocapitalize="words" placeholder="Full name"'} value="${esc(A[s.id])}" enterkeyhint="next">
+    <p class="err" id="err" hidden></p>`;}
+  if(s.kind==='phone') return `<label class="q" id="qt" for="f-phone">${s.q()}</label><p class="sub">${s.sub}</p>
+    <div class="phone"><label class="vh" for="f-cc">Country code</label>
+      <select class="field cc" id="f-cc">${[['+44','UK +44'],['+234','NG +234'],['other','Other']].map(([v,l])=>`<option value="${v}"${A.cc===v?' selected':''}>${l}</option>`).join('')}</select>
+      <input class="field" id="f-phone" type="tel" inputmode="tel" autocomplete="tel" value="${esc(A.phone)}" placeholder="${A.cc==='+44'?'7700 900123':A.cc==='+234'?'803 123 4567':'+1 555 123 4567'}" enterkeyhint="next"></div>
+    <p class="err" id="err" hidden></p>`;
+  if(s.kind==='single'||s.kind==='multi') return `<h1 class="q" id="qt">${s.q()}</h1>${s.sub?`<p class="sub">${s.sub}</p>`:''}${optsHTML(s)}`;
+  if(s.kind==='review'){
+    const val=k=>k==='phone'?fullPhone():Array.isArray(A[k])?A[k].join(', '):A[k];
+    const rows=Object.keys(LABELS).map(k=>`<div class="row"><dt>${LABELS[k]}</dt><dd>${esc(val(k))}</dd><button type="button" class="edit" data-go="${STEPS.findIndex(x=>x.id===k)}" aria-label="Edit ${LABELS[k]}">Edit</button></div>`).join('');
+    return `<h1 class="q" id="qt">Check and send, ${first()}.</h1>
+      <p class="sub">Your enquiry goes straight to our team. Nothing is sent until you choose how.</p>
+      <dl class="summary">${rows}</dl>
+      <label class="consent" for="f-consent"><input type="checkbox" id="f-consent"${A.consent?' checked':''}><span>I would like Damon BlaQ Consulting to contact me about my UK property interest. I understand that this form is not a commitment to buy or borrow.</span></label>
+      <p class="err" id="err" hidden>Please tick the box above so we can contact you.</p>`;
+  }
+  if(s.kind==='done') return `<div class="done-mark"><svg width="30" height="30" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2.5 7.4 5.6 10.4 11.5 3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <h1 class="q">Almost there, ${first()}.</h1>
+    <p class="sub">Your message is ready. Tap <b>Send</b> in WhatsApp or your email app to finish, and our team will reply.</p>
+    <div class="contacts"><span>Didn’t open? Message us directly:</span><span>WhatsApp <strong>${WA_DISPLAY}</strong></span><span>Email <strong>${EMAIL}</strong></span></div>
+    <div id="fb"></div>`;
+}
+
+function foot(s){
+  if(s.kind==='intro') return `<button class="btn primary" id="go" type="button">Get started</button><p class="note">About one minute. Nothing is sent until you choose to send it.</p>`;
+  if(s.kind==='review') return `<a class="btn wa" id="wa" href="${waHref()}" target="_blank" rel="noopener" aria-disabled="${!A.consent}">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg>
+      Send on WhatsApp</a>
+    <div class="pair"><a class="btn ghost" id="em" href="${mailHref()}" aria-disabled="${!A.consent}">Email instead</a><button class="btn ghost" id="cp" type="button">Copy answers</button></div>`;
+  if(s.kind==='done') return `<button class="btn ghost" id="cp" type="button">Copy my answers</button><button class="link" id="restart" type="button">Start a new enquiry</button>`;
+  if(s.kind==='single'&&!A[s.id]) return '';
+  return `<button class="btn primary" id="go" type="button"${(s.kind==='multi'&&!valid(s))?' disabled':''}>${toReview?'Save and review':'Continue'}</button>`;
+}
+
+function toast(t){const el=$('toast');el.textContent=t;el.style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>el.style.opacity=0,1600);}
+function copy(){
+  const txt=message();
+  const fb=()=>{const box=$('fb')||$('main');const ta=document.createElement('textarea');ta.className='fallback';ta.value=txt;ta.readOnly=true;box.appendChild(ta);ta.focus();ta.select();toast('Select all and copy');};
+  try{navigator.clipboard.writeText(txt).then(()=>toast('Copied'),fb);}catch(e){fb();}
+}
+
+function advance(){
+  const s=STEPS[i];
+  if(!valid(s)){const e=$('err'); if(e){e.textContent=ERR[s.id]||'Please choose an option.';e.hidden=false;} const f=document.querySelector('.field:not(.cc)'); if(f){f.focus(); if(ANIM) G.fromTo(f.closest('.phone')||f,{x:-10},{x:0,duration:.6,ease:'elastic.out(1,0.3)'});} return;}
+  save();
+  if(toReview&&i<REVIEW){toReview=false;go(REVIEW);} else go(i+1);
+}
+function go(n){if(moving)return;dir=n>=i?1:-1;i=n;busy=false;render();}
+function pop(b,on){if(!ANIM)return;G.fromTo(b,{scale:.975},{scale:1,duration:.55,ease:'back.out(2.2)'});if(on)G.fromTo(b.querySelector('.tick'),{scale:.3},{scale:1,duration:.5,ease:'back.out(3)'});}
+
+function bind(s){
+  const g=$('go'); if(g) g.onclick=()=> s.kind==='intro'?go(1):advance();
+  if(s.kind==='text'||s.kind==='phone'){
+    const f=$('f-'+s.id);
+    f.oninput=()=>{A[s.id]=f.value;const e=$('err');e&&(e.hidden=true);};
+    f.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();advance();}};
+    if(s.kind==='phone') $('f-cc').onchange=e=>{A.cc=e.target.value;f.placeholder=A.cc==='+44'?'7700 900123':A.cc==='+234'?'803 123 4567':'+1 555 123 4567';f.focus();};
+    setTimeout(()=>{try{f.focus({preventScroll:true})}catch(e){}},60);
+  }
+  if(s.kind==='single'||s.kind==='multi'){
+    document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+      const v=b.dataset.v;
+      if(s.kind==='multi'){const a=A[s.id];const k=a.indexOf(v);k<0?a.push(v):a.splice(k,1);b.setAttribute('aria-checked',k<0);pop(b,k<0);const g2=$('go');g2&&(g2.disabled=!valid(s));save();}
+      else{if(busy)return;busy=true;A[s.id]=v;document.querySelectorAll('.opt').forEach(x=>x.setAttribute('aria-checked',x===b));pop(b,true);save();setTimeout(advance,ANIM?380:200);}
+    });
+  }
+  if(s.kind==='review'){
+    const c=$('f-consent'),wa=$('wa'),em=$('em');
+    c.onchange=()=>{A.consent=c.checked;wa.setAttribute('aria-disabled',!c.checked);em.setAttribute('aria-disabled',!c.checked);$('err').hidden=true;};
+    [wa,em].forEach(a=>a.onclick=e=>{if(!A.consent){e.preventDefault();$('err').hidden=false;c.focus();return;}setTimeout(()=>go(REVIEW+1),400);});
+    document.querySelectorAll('.edit').forEach(b=>b.onclick=()=>{toReview=true;go(+b.dataset.go);});
+  }
+  const cp=$('cp'); if(cp) cp.onclick=copy;
+  const r=$('restart'); if(r) r.onclick=()=>{A={name:'',cc:'+44',phone:'',email:'',interests:[],budget:'',route:'',timeline:'',next:[],contact:'',consent:false};toReview=false;try{localStorage.removeItem('dbq-btl')}catch(e){}go(0);};
+}
+
+function enter(){
+  const sec=$('main').firstElementChild, items=[];
+  [...sec.children].forEach(k=>k.matches('.opts,.summary,.perks')?items.push(...k.children):items.push(k));
+  G.fromTo(items,{autoAlpha:0,y:28*dir},{autoAlpha:1,y:0,duration:.7,ease:'expo.out',stagger:.05,clearProps:'transform,opacity,visibility'});
+  const act=[...$('actions').children];
+  if(act.length) G.fromTo(act,{autoAlpha:0,y:18},{autoAlpha:1,y:0,duration:.6,ease:'expo.out',delay:.12,stagger:.05,clearProps:'transform,opacity,visibility'});
+}
+function render(){
+  const s=STEPS[i], edge=s.kind==='intro'||s.kind==='done';
+  const pct=edge?0:(i/TOTAL*100);
+  if(!edge){
+    $('count').textContent=i===REVIEW?'Review':`${i} of ${TOTAL-1}`;
+    if(ANIM&&!$('track').hidden) G.to($('bar'),{width:pct+'%',duration:.8,ease:'expo.out'}); else $('bar').style.width=pct+'%';
+  }
+  const swap=()=>{
+    $('back').hidden=edge; $('brand').hidden=!edge; $('track').hidden=edge; $('count').hidden=edge;
+    $('main').innerHTML=`<section class="screen">${body(s)}</section>`;
+    $('actions').innerHTML=foot(s);
+    window.scrollTo(0,0);
+    moving=false;
+    bind(s);
+    if(ANIM) enter();
+  };
+  const old=$('main').firstElementChild;
+  if(ANIM&&old){
+    moving=true;
+    G.to([old,...$('actions').children],{autoAlpha:0,y:-16*dir,duration:.24,ease:'power2.in',onComplete:swap});
+  } else swap();
+}
+$('back').onclick=()=>{ if(toReview){toReview=false;go(REVIEW);} else go(Math.max(0,i-1)); };
+render();
+</script>
+</body>
+</html>
