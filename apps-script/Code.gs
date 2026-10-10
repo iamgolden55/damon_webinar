@@ -14,6 +14,9 @@
  * Version: New version. (The /exec URL stays the same.)
  */
 
+// The "Damon BlaQ Webinar Leads" sheet. Works whether this script is attached to the sheet or standalone.
+const SHEET_ID = '1JOQJ-0Vt8qy8QbqF705RBO7CnjMJlLe2bwVubBITZGM';
+
 const HEADERS = [
   'Submitted at', 'Name', 'WhatsApp', 'Email', 'Based in', 'Interested in',
   'Budget', 'Purchase route', 'Timeline', 'Next step', 'Preferred contact',
@@ -39,7 +42,7 @@ function doPost(e) {
     const lock = LockService.getScriptLock();
     lock.waitLock(10000);
     try {
-      const sh = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+      const sh = SpreadsheetApp.openById(SHEET_ID).getSheets()[0];
       const head = sh.getRange(1, 1, 1, HEADERS.length).getValues()[0];
       if (head.join('|') !== HEADERS.join('|')) {
         sh.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]).setFontWeight('bold');
