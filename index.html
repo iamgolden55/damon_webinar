@@ -129,6 +129,32 @@ textarea.fallback{width:100%;min-height:200px;border:0;border-radius:14px;paddin
 const G=window.gsap, RM=matchMedia('(prefers-reduced-motion: reduce)').matches, ANIM=!!G&&!RM;
 let moving=false;
 const WA_NUMBER='2349048606453', WA_DISPLAY='+234 904 860 6453', EMAIL='info@damonblaq.com';
+
+/* ── Lead capture ─────────────────────────────────────────────
+   Paste the Google Apps Script web app URL (ends in /exec) below.
+   See apps-script/Code.gs and README.md for the 3-minute setup. */
+const SHEET_ENDPOINT='';
+const QS=new URLSearchParams(location.search);
+const SOURCE=QS.get('source')||'Webinar 10 Oct 2026';
+const REF=[QS.get('ref'),QS.get('utm_source'),QS.get('utm_campaign')].filter(Boolean).join(' / ');
+const CONSENT_TEXT='I would like Damon BlaQ Consulting to contact me about my UK property interest. I understand that this form is not a commitment to buy or borrow.';
+const CONTACT_BY={'WhatsApp':'on WhatsApp','Phone call':'by phone','Email':'by email'};
+let sent=null; // 'saved' | 'failed'
+
+async function submit(){
+  if(!SHEET_ENDPOINT) throw new Error('No endpoint configured');
+  const id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2);
+  const body=JSON.stringify({id,name:A.name.trim(),phone:fullPhone(),email:A.email.trim(),
+    based:A.cc==='+44'?'UK':A.cc==='+234'?'Nigeria':'Other',interests:A.interests.join(', '),budget:A.budget,
+    route:A.route,timeline:A.timeline,next:A.next.join(', '),contact:A.contact,consent:true,consentText:CONSENT_TEXT,
+    ref:REF,source:SOURCE,page:location.href.split('#')[0],website:($('f-website')||{}).value||''});
+  const opts={method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body};
+  let res;
+  try{res=await fetch(SHEET_ENDPOINT,opts);}
+  catch(e){await fetch(SHEET_ENDPOINT,Object.assign({mode:'no-cors'},opts));return;} // same id, so the sheet ignores a repeat
+  const j=await res.json().catch(()=>({ok:res.ok}));
+  if(!j.ok) throw new Error(j.error||'Not saved');
+}
 const OPTS={
   interests:['Monthly rental income in pounds','Long-term property growth','Owning a UK property','A mortgage-assisted purchase'],
   budget:['Under £200,000','£200,000–£250,000','£250,000+','Not sure yet'],
@@ -217,26 +243,35 @@ function body(s){
   if(s.kind==='review'){
     const val=k=>k==='phone'?fullPhone():Array.isArray(A[k])?A[k].join(', '):A[k];
     const rows=Object.keys(LABELS).map(k=>`<div class="row"><dt>${LABELS[k]}</dt><dd>${esc(val(k))}</dd><button type="button" class="edit" data-go="${STEPS.findIndex(x=>x.id===k)}" aria-label="Edit ${LABELS[k]}">Edit</button></div>`).join('');
-    return `<h1 class="q" id="qt">Check and send, ${first()}.</h1>
-      <p class="sub">Your enquiry goes straight to our team. Nothing is sent until you choose how.</p>
+    return `<h1 class="q" id="qt">Check and submit, ${first()}.</h1>
+      <p class="sub">Tap Edit to change anything. Your details go only to the Damon BlaQ team.</p>
       <dl class="summary">${rows}</dl>
-      <label class="consent" for="f-consent"><input type="checkbox" id="f-consent"${A.consent?' checked':''}><span>I would like Damon BlaQ Consulting to contact me about my UK property interest. I understand that this form is not a commitment to buy or borrow.</span></label>
+      <label class="consent" for="f-consent"><input type="checkbox" id="f-consent"${A.consent?' checked':''}><span>${CONSENT_TEXT}</span></label>
+      <input type="text" id="f-website" name="website" tabindex="-1" autocomplete="off" class="vh" aria-hidden="true">
       <p class="err" id="err" hidden>Please tick the box above so we can contact you.</p>`;
   }
-  if(s.kind==='done') return `<div class="done-mark"><svg width="30" height="30" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2.5 7.4 5.6 10.4 11.5 3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    <h1 class="q">Almost there, ${first()}.</h1>
-    <p class="sub">Your message is ready. Tap <b>Send</b> in WhatsApp or your email app to finish, and our team will reply.</p>
-    <div class="contacts"><span>Didn’t open? Message us directly:</span><span>WhatsApp <strong>${WA_DISPLAY}</strong></span><span>Email <strong>${EMAIL}</strong></span></div>
-    <div id="fb"></div>`;
+  if(s.kind==='done'){
+    const mark=`<div class="done-mark"><svg width="30" height="30" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2.5 7.4 5.6 10.4 11.5 3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`;
+    if(sent==='saved') return `${mark}
+      <h1 class="q">You’re in, ${first()}.</h1>
+      <p class="sub">We’ve received your details. Our team will contact you ${CONTACT_BY[A.contact]||'shortly'}.</p>
+      <div class="contacts"><span>Want to talk sooner?</span><span>WhatsApp <strong>${WA_DISPLAY}</strong></span><span>Email <strong>${EMAIL}</strong></span></div>
+      <div id="fb"></div>`;
+    return `<h1 class="q">Nearly there, ${first()}.</h1>
+      <p class="sub">We couldn’t save your answers just now. Send them to us on WhatsApp and we’ll take it from there.</p>
+      <div class="contacts"><span>WhatsApp <strong>${WA_DISPLAY}</strong></span><span>Email <strong>${EMAIL}</strong></span></div>
+      <div id="fb"></div>`;
+  }
 }
 
 function foot(s){
-  if(s.kind==='intro') return `<button class="btn primary" id="go" type="button">Get started</button><p class="note">About one minute. Nothing is sent until you choose to send it.</p>`;
-  if(s.kind==='review') return `<a class="btn wa" id="wa" href="${waHref()}" target="_blank" rel="noopener" aria-disabled="${!A.consent}">
+  if(s.kind==='intro') return `<button class="btn primary" id="go" type="button">Get started</button><p class="note">About one minute. Your details go only to the Damon BlaQ team.</p>`;
+  if(s.kind==='review') return `<button class="btn primary" id="submit" type="button">Submit my interest</button>`;
+  if(s.kind==='done'&&sent==='saved') return `<a class="btn ghost" href="${waHref()}" target="_blank" rel="noopener">Message us on WhatsApp</a><button class="link" id="restart" type="button">Start a new enquiry</button>`;
+  if(s.kind==='done') return `<a class="btn wa" id="wa" href="${waHref()}" target="_blank" rel="noopener">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></svg>
       Send on WhatsApp</a>
-    <div class="pair"><a class="btn ghost" id="em" href="${mailHref()}" aria-disabled="${!A.consent}">Email instead</a><button class="btn ghost" id="cp" type="button">Copy answers</button></div>`;
-  if(s.kind==='done') return `<button class="btn ghost" id="cp" type="button">Copy my answers</button><button class="link" id="restart" type="button">Start a new enquiry</button>`;
+    <div class="pair"><a class="btn ghost" id="em" href="${mailHref()}">Email instead</a><button class="btn ghost" id="cp" type="button">Copy answers</button></div>`;
   if(s.kind==='single'&&!A[s.id]) return '';
   return `<button class="btn primary" id="go" type="button"${(s.kind==='multi'&&!valid(s))?' disabled':''}>${toReview?'Save and review':'Continue'}</button>`;
 }
@@ -274,13 +309,18 @@ function bind(s){
     });
   }
   if(s.kind==='review'){
-    const c=$('f-consent'),wa=$('wa'),em=$('em');
-    c.onchange=()=>{A.consent=c.checked;wa.setAttribute('aria-disabled',!c.checked);em.setAttribute('aria-disabled',!c.checked);$('err').hidden=true;};
-    [wa,em].forEach(a=>a.onclick=e=>{if(!A.consent){e.preventDefault();$('err').hidden=false;c.focus();return;}setTimeout(()=>go(REVIEW+1),400);});
+    const c=$('f-consent'),sb=$('submit');
+    c.onchange=()=>{A.consent=c.checked;$('err').hidden=true;};
+    sb.onclick=async()=>{
+      if(!A.consent){$('err').hidden=false;c.focus();if(ANIM)G.fromTo(c.closest('.consent'),{x:-10},{x:0,duration:.6,ease:'elastic.out(1,0.3)'});return;}
+      sb.disabled=true;sb.textContent='Submitting…';
+      try{await submit();sent='saved';try{localStorage.removeItem('dbq-btl')}catch(e){}}catch(e){sent='failed';}
+      go(REVIEW+1);
+    };
     document.querySelectorAll('.edit').forEach(b=>b.onclick=()=>{toReview=true;go(+b.dataset.go);});
   }
   const cp=$('cp'); if(cp) cp.onclick=copy;
-  const r=$('restart'); if(r) r.onclick=()=>{A={name:'',cc:'+44',phone:'',email:'',interests:[],budget:'',route:'',timeline:'',next:[],contact:'',consent:false};toReview=false;try{localStorage.removeItem('dbq-btl')}catch(e){}go(0);};
+  const r=$('restart'); if(r) r.onclick=()=>{A={name:'',cc:'+44',phone:'',email:'',interests:[],budget:'',route:'',timeline:'',next:[],contact:'',consent:false};toReview=false;sent=null;try{localStorage.removeItem('dbq-btl')}catch(e){}go(0);};
 }
 
 function enter(){
